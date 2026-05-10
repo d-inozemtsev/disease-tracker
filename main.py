@@ -4,17 +4,12 @@ from src.analyzer import extract_locations, extract_diseases, map_diseases_to_lo
 from src.geocoder import build_geo_dataset
 
 def main():
-    print("Инициализация базы данных...")
+
     init_db()
-    
-    print("Запрашиваем свежие новости...")
     articles = fetch_news()
     
     if articles:
         save_articles(articles)
-        print(f"Успешно сохранено {len(articles)} новостей!\n")
-        
-        print("Анализируем последние записи...")
         recent = get_recent_articles(limit=500)
         analyzed_data = []
 
@@ -31,17 +26,15 @@ def main():
                 })
                 
                 if locations and diseases:
-                    print(f"🚨 Найдено совпадение! {', '.join(diseases).upper()} в {', '.join(locations)}")
-                    print(f"   Новость: [{source}] {title}\n")
+                    print(f"found {', '.join(diseases).upper()} in {', '.join(locations)}")
+                    print(f"news: [{source}] {title}\n")
         
         final_statistics = map_diseases_to_locations(analyzed_data)
         geo_dataset = build_geo_dataset(final_statistics)
-        
-        print("\n Финальный датасет для карты:")
         print(geo_dataset)
             
     else:
-        print("Новых статей не найдено.")
+        print("Not found new title")
 
 if __name__ == "__main__":
     main()

@@ -8,7 +8,7 @@ from functools import lru_cache
 
 @lru_cache(maxsize=None)
 def load_models():
-    print("🚀 Загрузка ИИ-моделей в память...")
+    """Загружвет модель в память"""
     nlp = spacy.load("en_core_web_sm")
     classifier = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
     return nlp, classifier

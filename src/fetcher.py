@@ -19,8 +19,6 @@ def fetch_news(DAYS_BACK=7):
     all_articles = []
     seen_titles = set()
 
-    print(f"🕵️ Начинаем глобальный поиск за период с {from_param} по {to_param}...")
-
     for disease in KNOWN_DISEASES:
         query = f'({disease}) AND (outbreak OR epidemic OR cases)'
         
@@ -33,19 +31,18 @@ def fetch_news(DAYS_BACK=7):
             if data.get("status") == "ok":
                 articles = data.get("articles", [])
                 
-                # Фильтруем дубликаты
                 for article in articles:
                     title = article.get("title")
                     if title and title not in seen_titles and "[Removed]" not in title:
                         seen_titles.add(title)
                         all_articles.append(article)
                         
-                print(f"✅ {disease.upper().ljust(20)}: скачано уникальных статей: {len(articles)}")
+                print(f"{disease.upper().ljust(20)}: download {len(articles)}")
             else:
-                print(f"⚠️ Ошибка API для {disease}: {data.get('message')}")
+                print(f"error API for {disease}: {data.get('message')}")
                 
         except Exception as e:
-            print(f"❌ Ошибка соединения при поиске {disease}: {e}")
+            print(f"Connection error {disease}: {e}")
 
-    print(f"\n🎯 Итог: в трубу (Pipeline) отправлено {len(all_articles)} новостей!")
+    print(f"Succesfully send {len(all_articles)} news")
     return all_articles

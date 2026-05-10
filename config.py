@@ -52,6 +52,3 @@ PAGE_SIZE = 40
 DB_NAME = "disease_news.db"
 
 GEOCODER_USER_AGENT = "disease_tracker"
-
-
-print(NEWS_API_KEY)

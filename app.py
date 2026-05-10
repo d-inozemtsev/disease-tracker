@@ -34,7 +34,7 @@ def load_data():
     return geo_data
 
 
-with st.spinner('Анализируем новостные сводки...'):
+with st.spinner('Анализ новостей по всему миру...охх, как много всего'):
     data = load_data()
 
 is_nearest = False

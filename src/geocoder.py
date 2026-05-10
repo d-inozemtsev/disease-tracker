@@ -15,7 +15,7 @@ def to_coords(text: str) -> dict:
         if location:
             return {'latitude': location.latitude, 'longitude': location.longitude}
     except Exception as e:
-        print(f"⚠️ Ошибка геокодирования для {text}: {e}")
+        print(f"Geocoding error for {text}: {e}")
     return None
 
 def build_geo_dataset(statistics: dict) -> list:

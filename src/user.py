@@ -12,7 +12,7 @@ def get_user_location():
                 "city": response['city']
             }
     except Exception as e:
-        print(f"Ошибка получения IP: {e}")
+        print(f"Getting IP Error: {e}")
     return None
 
 def nearest_disease(user_coord: tuple, data: list) -> dict:

@@ -1,0 +1,66 @@
+import streamlit as st
+import folium
+import streamlit.components.v1 as components
+from src.database import get_recent_articles
+from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak
+from src.geocoder import build_geo_dataset
+from src.user import get_user_location, nearest_disease
+
+
+st.set_page_config(page_title="Disease Tracker", page_icon="🦠", layout="wide")
+
+st.title("🦠 Глобальный мониторинг вспышек заболеваний по всему миру")
+
+@st.cache_data
+def load_data():
+
+    recent = get_recent_articles(limit=500)
+    analyzed_data = []
+    for source, title in recent:
+        if is_real_outbreak(title):
+            locs = extract_locations(title)
+            dis = extract_diseases(title)
+            analyzed_data.append({"locations": locs, "diseases": dis})
+
+    stats = map_diseases_to_locations(analyzed_data)
+    geo_data = build_geo_dataset(stats)
+    return geo_data
+
+
+with st.spinner('Анализируем новостные сводки...'):
+    data = load_data()
+
+if data:
+    st.success(f"Анализ завершен. Найдено потенциальных очагов: {len(data)}")
+
+    user_info = get_user_location()
+    
+    if user_info:
+        user_coords = (user_info['lat'], user_info['lon'])
+        nearest = nearest_disease(user_coords, data)
+        
+        if nearest:
+            # Выводим красивый алерт!
+            st.warning(
+                f"📍 Ваша локация: **{user_info['city']}**. "
+                f"Ближайшая потенциальная угроза ({', '.join(nearest['disease']).upper()}) "
+                f"находится в **{nearest['distance_km']} км** от вас ({nearest['location']})."
+            )
+    
+    m = folium.Map(location=[30.0, -20.0], zoom_start=2)
+
+    for item in data:
+        folium.CircleMarker(
+            location=[item['lat'], item['lon']],
+            radius=10,
+            color="red",
+            fill=True,
+            fill_color="red",
+            fill_opacity=0.6,
+            popup=f"<b>{item['location']}</b><br>Вирусы: {', '.join(item['disease'])}"
+        ).add_to(m)
+        
+    components.html(m._repr_html_(), height=600)
+
+else:
+    st.warning("В последних новостях не найдено упоминаний болезней и локаций.")

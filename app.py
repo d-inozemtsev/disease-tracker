@@ -11,7 +11,9 @@ st.set_page_config(page_title="Disease Tracker", page_icon="🦠", layout="wide"
 
 st.title("🦠 Глобальный мониторинг вспышек заболеваний по всему миру")
 
-@st.cache_data
+user_info = get_user_location()
+
+@st.cache_data(ttl=300)
 def load_data():
 
     recent = get_recent_articles(limit=500)
@@ -32,8 +34,6 @@ with st.spinner('Анализируем новостные сводки...'):
 
 if data:
     st.success(f"Анализ завершен. Найдено потенциальных очагов: {len(data)}")
-
-    user_info = get_user_location()
     
     if user_info:
         user_coords = (user_info['lat'], user_info['lon'])
@@ -61,6 +61,8 @@ if data:
         ).add_to(m)
         
     components.html(m._repr_html_(), height=600)
+    if st.button("🔄 обновить данные"):
+        st.cache_data.clear()
 
 else:
     st.warning("В последних новостях не найдено упоминаний болезней и локаций.")

@@ -5,6 +5,7 @@ from src.database import get_recent_articles
 from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak
 from src.geocoder import build_geo_dataset
 from src.user import get_user_location, nearest_disease
+from streamlit_geolocation import streamlit_geolocation
 
 
 st.set_page_config(page_title="Disease Tracker", page_icon="🦠", layout="wide")
@@ -34,18 +35,21 @@ with st.spinner('Анализируем новостные сводки...'):
 
 if data:
     st.success(f"Анализ завершен. Найдено потенциальных очагов: {len(data)}")
+
+    st.write("**Покажи свою локацию плиз, нажми 'Разрешить'**")
+    location = streamlit_geolocation()
     
-    if user_info:
-        user_coords = (user_info['lat'], user_info['lon'])
-        nearest = nearest_disease(user_coords, data)
-        
-        if nearest:
-            # Выводим красивый алерт!
-            st.warning(
-                f"📍 Ваша локация: **{user_info['city']}**. "
-                f"Ближайшая потенциальная угроза ({', '.join(nearest['disease']).upper()}) "
-                f"находится в **{nearest['distance_km']} км** от вас ({nearest['location']})."
-            )
+    if location['latitude'] is not None and location['longitude'] is not None:
+        user_coords = (location['latitude'], location['longitude'])
+    nearest = nearest_disease(user_coords, data)
+    
+    if nearest:
+        st.warning(
+            f" Рядом с тобой обнаружено ({', '.join(nearest['disease']).upper()}) "
+            f"и он где-то в **{nearest['distance_km']} км** от тебя, примерно вот тут: ({nearest['location']})."
+        )
+    else:
+        st.info("Нажми и узнаешь, как далеко от тебя угроза!")
     
     m = folium.Map(location=[30.0, -20.0], zoom_start=2)
 

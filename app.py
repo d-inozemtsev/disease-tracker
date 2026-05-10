@@ -33,25 +33,35 @@ def load_data():
 with st.spinner('Анализируем новостные сводки...'):
     data = load_data()
 
+is_nearest = False
 if data:
     st.success(f"Анализ завершен. Найдено потенциальных очагов: {len(data)}")
 
-    st.write("**Покажи свою локацию плиз, нажми 'Разрешить'**")
+    st.write("**Покажи свою локацию плиз, нажми 'Разрешить' и на кнопку ниже (мишень типа)**")
     location = streamlit_geolocation()
     
     if location['latitude'] is not None and location['longitude'] is not None:
         user_coords = (location['latitude'], location['longitude'])
-    nearest = nearest_disease(user_coords, data)
-    
-    if nearest:
-        st.warning(
-            f" Рядом с тобой обнаружено ({', '.join(nearest['disease']).upper()}) "
-            f"и он где-то в **{nearest['distance_km']} км** от тебя, примерно вот тут: ({nearest['location']})."
-        )
+        nearest = nearest_disease(user_coords, data)
+
+        if nearest:
+            is_nearest = True
+            st.warning(
+                f" Рядом с тобой обнаружено ({', '.join(nearest['disease']).upper()}) "
+                f"и он где-то в **{nearest['distance_km']} км** от тебя, примерно вот тут: ({nearest['location']})."
+            )
     else:
-        st.info("Нажми и узнаешь, как далеко от тебя угроза!")
+        st.info("Разреши доступ к гео и узнаешь, как далеко от тебя угроза!")
     
     m = folium.Map(location=[30.0, -20.0], zoom_start=2)
+
+    if is_nearest:
+        folium.Marker(
+            location=user_coords,
+            popup="<b>Это ТЫ, а не вирус!! ха-ха</b>",
+            tooltip="Твоя локация",
+            icon=folium.Icon(color="blue", icon="user", prefix="fa")
+        ).add_to(m)
 
     for item in data:
         folium.CircleMarker(

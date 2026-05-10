@@ -1,6 +1,6 @@
 from src.database import init_db, save_articles, get_recent_articles
 from src.fetcher import fetch_news
-from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak
+from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak, load_models
 from src.geocoder import build_geo_dataset
 
 def main():
@@ -16,16 +16,15 @@ def main():
         
         print("Анализируем последние записи...")
         recent = get_recent_articles(limit=500)
-        # Сюда будем складывать словари с результатами анализа каждой новости
         analyzed_data = []
+
+        nlp_model, classifier_model = load_models()
         
         for source, title in recent:
-            if is_real_outbreak(title):
-            # Ищем и страны, и болезни в одном заголовке
-                locations = extract_locations(title)
+            if is_real_outbreak(title, classifier_model):
+                locations = extract_locations(title, nlp_model)
                 diseases = extract_diseases(title)
                 
-                # Сохраняем результат в виде словаря и кидаем в общий список
                 analyzed_data.append({
                     "locations": locations,
                     "diseases": diseases
@@ -38,6 +37,7 @@ def main():
         final_statistics = map_diseases_to_locations(analyzed_data)
         geo_dataset = build_geo_dataset(final_statistics)
         
+        print("\n Финальный датасет для карты:")
         print(geo_dataset)
             
     else:

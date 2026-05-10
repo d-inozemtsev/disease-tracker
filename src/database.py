@@ -1,6 +1,5 @@
 import sqlite3
-
-DB_NAME = "disease_news.db"
+from config import DB_NAME
 
 def init_db():
     """Создает таблицу, если её нет """

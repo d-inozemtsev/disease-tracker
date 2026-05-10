@@ -2,7 +2,7 @@ import streamlit as st
 import folium
 import streamlit.components.v1 as components
 from src.database import get_recent_articles
-from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak
+from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak, load_models
 from src.geocoder import build_geo_dataset
 from src.user import get_user_location, nearest_disease
 from streamlit_geolocation import streamlit_geolocation
@@ -16,14 +16,18 @@ user_info = get_user_location()
 
 @st.cache_data(ttl=300)
 def load_data():
-
     recent = get_recent_articles(limit=500)
     analyzed_data = []
+
+    nlp_model, classifier_model = load_models()
+    
     for source, title in recent:
-        if is_real_outbreak(title):
-            locs = extract_locations(title)
+        if is_real_outbreak(title, classifier_model):
+            locs = extract_locations(title, nlp_model)
             dis = extract_diseases(title)
-            analyzed_data.append({"locations": locs, "diseases": dis})
+            
+            if locs and dis:
+                analyzed_data.append({"locations": locs, "diseases": dis})
 
     stats = map_diseases_to_locations(analyzed_data)
     geo_data = build_geo_dataset(stats)

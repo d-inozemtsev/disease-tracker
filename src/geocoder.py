@@ -1,5 +1,4 @@
 import time
-import streamlit as st
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 from config import GEOCODER_USER_AGENT

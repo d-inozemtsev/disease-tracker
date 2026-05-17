@@ -1,10 +1,9 @@
 import requests
-import os
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
-from config import KNOWN_DISEASES, DAYS_BACK, NEWS_API_KEY
+from config import KNOWN_DISEASES, NEWS_API_KEY
 
 API_KEY = NEWS_API_KEY
+
 
 def fetch_news(DAYS_BACK=7):
     '''Получает список статей с NewsAPI по конкретным болезням за период'''

@@ -1,0 +1,327 @@
+[
+    {
+        "location": "Jakarta",
+        "disease": [
+            "tb",
+            "leptospirosis"
+        ],
+        "lat": -6.1754049,
+        "lon": 106.827168
+    },
+    {
+        "location": "Indonesia",
+        "disease": [
+            "tb",
+            "leptospirosis",
+            "tuberculosis"
+        ],
+        "lat": -2.4833826,
+        "lon": 117.8902853
+    },
+    {
+        "location": "Reading",
+        "disease": [
+            "tb",
+            "meningitis"
+        ],
+        "lat": 51.4564242,
+        "lon": -0.9700664
+    },
+    {
+        "location": "Brazil",
+        "disease": [
+            "meningitis",
+            "leptospirosis"
+        ],
+        "lat": -10.3333333,
+        "lon": -53.2
+    },
+    {
+        "location": "UK",
+        "disease": [
+            "tb",
+            "meningitis"
+        ],
+        "lat": 54.7023545,
+        "lon": -3.2765753
+    },
+    {
+        "location": "California",
+        "disease": [
+            "tuberculosis",
+            "tb",
+            "flu"
+        ],
+        "lat": 36.7014631,
+        "lon": -118.755997
+    },
+    {
+        "location": "Saskatchewan",
+        "disease": [
+            "hiv"
+        ],
+        "lat": 55.5321257,
+        "lon": -106.141224
+    },
+    {
+        "location": "France",
+        "disease": [
+            "tb"
+        ],
+        "lat": 46.603354,
+        "lon": 1.8883335
+    },
+    {
+        "location": "Maine",
+        "disease": [
+            "hiv",
+            "tb"
+        ],
+        "lat": 45.709097,
+        "lon": -68.8590201
+    },
+    {
+        "location": "Bangladesh",
+        "disease": [
+            "measles"
+        ],
+        "lat": 24.4769288,
+        "lon": 90.2934413
+    },
+    {
+        "location": "U.S.",
+        "disease": [
+            "tb",
+            "covid",
+            "hantavirus"
+        ],
+        "lat": 39.7837304,
+        "lon": -100.445882
+    },
+    {
+        "location": "Explode",
+        "disease": [
+            "hantavirus"
+        ],
+        "lat": 48.1360368,
+        "lon": 17.1046315
+    },
+    {
+        "location": "US",
+        "disease": [
+            "tb"
+        ],
+        "lat": 39.7837304,
+        "lon": -100.445882
+    },
+    {
+        "location": "Ghana",
+        "disease": [
+            "dengue",
+            "tb"
+        ],
+        "lat": 8.0300284,
+        "lon": -1.0800271
+    },
+    {
+        "location": "Uganda",
+        "disease": [
+            "ebola",
+            "tb"
+        ],
+        "lat": 1.5333554,
+        "lon": 32.2166578
+    },
+    {
+        "location": "Congo",
+        "disease": [
+            "ebola",
+            "tb"
+        ],
+        "lat": -2.9814344,
+        "lon": 23.8222636
+    },
+    {
+        "location": "DR",
+        "disease": [
+            "ebola",
+            "tb"
+        ],
+        "lat": 52.9067922,
+        "lon": 6.6368423
+    },
+    {
+        "location": "New York",
+        "disease": [
+            "ebola"
+        ],
+        "lat": 40.7127281,
+        "lon": -74.0060152
+    },
+    {
+        "location": "Ebola",
+        "disease": [
+            "ebola",
+            "tb"
+        ],
+        "lat": 3.5113716,
+        "lon": 21.6610291
+    },
+    {
+        "location": "Netherlands",
+        "disease": [
+            "hantavirus",
+            "tb"
+        ],
+        "lat": 52.2434979,
+        "lon": 5.6343227
+    },
+    {
+        "location": "Vancouver",
+        "disease": [
+            "measles"
+        ],
+        "lat": 49.2608724,
+        "lon": -123.113952
+    },
+    {
+        "location": "Sierra Leone",
+        "disease": [
+            "mpox"
+        ],
+        "lat": 8.6400349,
+        "lon": -11.8400269
+    },
+    {
+        "location": "Alaska",
+        "disease": [
+            "hantavirus",
+            "tb"
+        ],
+        "lat": 64.4459613,
+        "lon": -149.680909
+    },
+    {
+        "location": "Texas",
+        "disease": [
+            "tb"
+        ],
+        "lat": 31.2638905,
+        "lon": -98.5456116
+    },
+    {
+        "location": "Virginia",
+        "disease": [
+            "hantavirus",
+            "lyme disease",
+            "lyme"
+        ],
+        "lat": 37.1232245,
+        "lon": -78.4927721
+    },
+    {
+        "location": "England",
+        "disease": [
+            "covid-19",
+            "covid"
+        ],
+        "lat": 52.5310214,
+        "lon": -1.2649062
+    },
+    {
+        "location": "America",
+        "disease": [
+            "hantavirus",
+            "tb"
+        ],
+        "lat": 39.7837304,
+        "lon": -100.445882
+    },
+    {
+        "location": "Tenerife",
+        "disease": [
+            "hantavirus"
+        ],
+        "lat": 28.2935785,
+        "lon": -16.6214471
+    },
+    {
+        "location": "Spain",
+        "disease": [
+            "hantavirus",
+            "plague"
+        ],
+        "lat": 39.3260685,
+        "lon": -4.8379791
+    },
+    {
+        "location": "Argentina",
+        "disease": [
+            "hantavirus",
+            "tb"
+        ],
+        "lat": -34.9964963,
+        "lon": -64.9672817
+    },
+    {
+        "location": "Ilia",
+        "disease": [
+            "leptospirosis"
+        ],
+        "lat": 45.9319245,
+        "lon": 22.6567922
+    },
+    {
+        "location": "Calif.",
+        "disease": [
+            "tb"
+        ],
+        "lat": 36.7014631,
+        "lon": -118.755997
+    },
+    {
+        "location": "SF",
+        "disease": [
+            "tb"
+        ],
+        "lat": 37.7879363,
+        "lon": -122.4075201
+    },
+    {
+        "location": "Ritzy",
+        "disease": [
+            "tuberculosis",
+            "tb"
+        ],
+        "lat": 51.46115,
+        "lon": -0.1149611
+    },
+    {
+        "location": "San Francisco",
+        "disease": [
+            "tuberculosis",
+            "tb"
+        ],
+        "lat": 37.7879363,
+        "lon": -122.4075201
+    },
+    {
+        "location": "Manitoba",
+        "disease": [
+            "hiv",
+            "hepatitis a",
+            "tb",
+            "measles"
+        ],
+        "lat": 55.001251,
+        "lon": -97.001038
+    },
+    {
+        "location": "Fiji",
+        "disease": [
+            "hiv"
+        ],
+        "lat": -18.1239696,
+        "lon": 179.0122737
+    }
+]

@@ -2,17 +2,21 @@ import requests
 from src.geocoder import calculate_distance
 
 def get_user_location():
-    """Определяет примерные координаты пользователя по IP"""
+    """Пуленепробиваемая версия (не банит VPN)"""
     try:
-        response = requests.get("http://ip-api.com/json/").json()
-        if response['status'] == 'success':
+        response = requests.get("https://ipwhois.app/json/", timeout=5).json()
+        
+        if response.get('success'):
             return {
-                "lat": response['lat'],
-                "lon": response['lon'],
-                "city": response['city']
+                "lat": float(response['latitude']),
+                "lon": float(response['longitude']),
+                "city": response.get('city', 'Unknown')
             }
+        else:
+            print("❌ Сервис заблокировал запрос:", response)
     except Exception as e:
-        print(f"Getting IP Error: {e}")
+        print(f"❌ Критическая ошибка получения IP: {e}")
+    
     return None
 
 def nearest_disease(user_coord: tuple, data: list) -> dict:

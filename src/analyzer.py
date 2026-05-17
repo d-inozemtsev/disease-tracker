@@ -1,6 +1,4 @@
-import streamlit as st
 import spacy
-from collections import Counter
 from transformers import pipeline
 from config import KNOWN_DISEASES
 from functools import lru_cache

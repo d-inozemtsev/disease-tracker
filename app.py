@@ -1,58 +1,54 @@
 import streamlit as st
 import folium
+import json
 import streamlit.components.v1 as components
-from src.database import get_recent_articles
-from src.analyzer import extract_locations, extract_diseases, map_diseases_to_locations, is_real_outbreak, load_models
-from src.geocoder import build_geo_dataset
 from src.user import get_user_location, nearest_disease
 from streamlit_geolocation import streamlit_geolocation
+from collections import Counter
+import pandas as pd
 
 
 st.set_page_config(page_title="Disease Tracker", page_icon="🦠", layout="wide")
 
 st.title("🦠 Глобальный мониторинг вспышек заболеваний по всему миру")
 
-user_info = get_user_location()
-
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=60)
 def load_data():
-    recent = get_recent_articles(limit=500)
-    analyzed_data = []
+    try:
+        with open("outbreaks.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
 
-    nlp_model, classifier_model = load_models()
-    
-    for source, title in recent:
-        if is_real_outbreak(title, classifier_model):
-            locs = extract_locations(title, nlp_model)
-            dis = extract_diseases(title)
-            
-            if locs and dis:
-                analyzed_data.append({"locations": locs, "diseases": dis})
-
-    stats = map_diseases_to_locations(analyzed_data)
-    geo_data = build_geo_dataset(stats)
-    return geo_data
-
-
-with st.spinner('Анализ новостей по всему миру...охх, как много всего'):
+with st.spinner('Загружаем карту угроз...ох, много всего'):
     data = load_data()
+
 
 is_nearest = False
 if data:
     st.success(f"Анализ завершен. Найдено потенциальных очагов: {len(data)}")
 
     st.write("**Покажи свою локацию плиз, нажми 'Разрешить' и на кнопку ниже (мишень типа)**")
-    location = streamlit_geolocation()
     
-    if location['latitude'] is not None and location['longitude'] is not None:
-        user_coords = (location['latitude'], location['longitude'])
-        nearest = nearest_disease(user_coords, data)
+    location_gps = streamlit_geolocation()
+    
+    user_coords = None
+    
+    if location_gps and location_gps.get('latitude') is not None:
+        user_coords = (location_gps['latitude'], location_gps['longitude'])
+    else:
+        ip_loc = get_user_location()
+        
+        if ip_loc and ip_loc.get('lat') is not None:
+            user_coords = (ip_loc['lat'], ip_loc['lon'])
 
+    if user_coords:
+        nearest = nearest_disease(user_coords, data)
         if nearest:
             is_nearest = True
             st.warning(
                 f" Рядом с тобой обнаружено ({', '.join(nearest['disease']).upper()}) "
-                f"и он где-то в **{nearest['distance_km']} км** от тебя, примерно вот тут: ({nearest['location']})."
+                f"и он где-то в **{nearest['distance_km']} км** от тебя, примерно вот тут: {nearest['location']} (это где ваще?)"
             )
     else:
         st.info("Разреши доступ к гео и узнаешь, как далеко от тебя угроза!")
@@ -79,8 +75,30 @@ if data:
         ).add_to(m)
         
     components.html(m._repr_html_(), height=600)
+    
     if st.button("🔄 обновить данные"):
         st.cache_data.clear()
+
+    st.markdown("---") 
+    st.subheader("Статистика по угрозам")
+    
+    all_diseases_extracted = [d.upper() for item in data for d in item['disease']]
+    disease_counts = Counter(all_diseases_extracted)
+    
+    metric_col1, metric_col2, metric_col3 = st.columns(3)
+    with metric_col1:
+        st.metric(label="Всего активных очагов на карте", value=len(data))
+    with metric_col2:
+        most_common_disease = disease_counts.most_common(1)[0][0] if disease_counts else "Нет данных"
+        st.metric(label="Говнюк недели", value=most_common_disease)
+
+    # Сам график
+    if disease_counts:
+        st.write("**Топ-5 вирусов по количеству упоминаний в прессе:**")
+        df_chart = pd.DataFrame(disease_counts.items(), columns=["Вирус", "Количество очагов"])
+        df_chart = df_chart.sort_values(by="Количество очагов", ascending=False).head(5)
+        st.bar_chart(data=df_chart, x="Вирус", y="Количество очагов", color="#ff4b4b")
+    # =========================================================
 
 else:
     st.warning("В последних новостях не найдено упоминаний болезней и локаций.")

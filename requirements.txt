@@ -3,7 +3,7 @@ folium
 geopy
 requests
 transformers
-torch --index-url https://download.pytorch.org/whl/cpu
+torch
 spacy
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz
 streamlit-geolocation

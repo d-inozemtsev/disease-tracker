@@ -1,6 +1,6 @@
 # 🦠 Global Disease Outbreak Tracker
 
-https://disease-tracker.streamlit.app/
+http://disease-tracker.duckdns.org/
 
 **Disease Tracker** - это аналитический веб-дашборд, который в реальном времени отслеживает мировые новостные сводки, использует ИИ для фильтрации данных и визуализирует потенциальные эпидемиологические угрозы на карте.
 

@@ -1,14 +1,21 @@
 import requests
 from datetime import datetime, timedelta
-from config import KNOWN_DISEASES, NEWS_API_KEY
+from config import NEWS_API_KEY
 
 API_KEY = NEWS_API_KEY
 
+BROAD_QUERIES = [
+    "outbreak AND (virus OR disease OR infection)",
+    "epidemic OR pandemic",
+    '"new cases" AND (virus OR infection)',
+    "quarantine OR health emergency"
+]
 
 def fetch_news(DAYS_BACK=7):
-    '''Получает список статей с NewsAPI по конкретным болезням за период'''
+    '''Получает список статей с NewsAPI по общим медицинским запросам за период'''
     if not API_KEY:
         raise ValueError("API ключ не найден! Проверь файл .env")
+    
     end_date = datetime.now()
     start_date = end_date - timedelta(days=DAYS_BACK)
 
@@ -18,10 +25,8 @@ def fetch_news(DAYS_BACK=7):
     all_articles = []
     seen_titles = set()
 
-    for disease in KNOWN_DISEASES:
-        query = f'({disease}) AND (outbreak OR epidemic OR cases)'
-        
-        url = f"https://newsapi.org/v2/everything?q={query}&from={from_param}&to={to_param}&language=en&sortBy=relevancy&apiKey={API_KEY}&pageSize=40"
+    for query in BROAD_QUERIES:
+        url = f"https://newsapi.org/v2/everything?q={query}&from={from_param}&to={to_param}&language=en&sortBy=relevancy&apiKey={API_KEY}&pageSize=100"
         
         try:
             response = requests.get(url)
@@ -36,12 +41,10 @@ def fetch_news(DAYS_BACK=7):
                         seen_titles.add(title)
                         all_articles.append(article)
                         
-                print(f"{disease.upper().ljust(20)}: download {len(articles)}")
+                print(f"Request '{query[:25]}...': download {len(articles)} titles")
             else:
-                print(f"error API for {disease}: {data.get('message')}")
+                print(f"Ошибка API для запроса '{query}': {data.get('message')}")
                 
         except Exception as e:
-            print(f"Connection error {disease}: {e}")
-
-    print(f"Succesfully send {len(all_articles)} news")
+            print(f"Error connection '{query}': {e}")
     return all_articles

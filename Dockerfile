@@ -2,6 +2,8 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+RUN pip install torch --index-url https://download.pytorch.org/whl/cpu --no-cache-dir
+
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt --no-cache-dir
